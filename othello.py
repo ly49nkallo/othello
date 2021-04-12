@@ -16,6 +16,7 @@ def initial_state():
     b[IX(4,4)] = BLACK
     b[IX(3,4)] = WHITE
     b[IX(4,3)] = WHITE
+
     return b
 
 class Othello():
@@ -32,11 +33,11 @@ class Othello():
                 return False
         return True
     
-    def player(self):
+    def player(self, board):
         # return current player to make move (assuming white goes first)
         whiteCount = 0
         blackCount = 0
-        for tile in self.board:
+        for tile in board:
             if tile == BLACK:
                 blackCount += 1
             if tile == WHITE:
@@ -47,10 +48,51 @@ class Othello():
         else:
             return BLACK
 
+
     def winner(self):  
         # return a string if you would be so nice (white or black)
         raise NotImplementedError
     
+    def cascade(self, board, move):
+
+        if board[IX(move[0], move[1])]:
+            raise NameError("cascading in occupied location")
+        
+        player = self.player(board)
+        
+        for dir in range(8):
+            cursor = move
+            tile = board[IX(cursor[0], cursor[1])]  # initialize
+            while True:
+                # move the cursor
+                if dir in set(0,1,7): # move up
+                    cursor[0] -= 1
+                if dir in set(3,4,5): # move down
+                    cursor[0] += 1
+                if dir in set(1,2,3): # move right
+                    cursor[1] += 1
+                if dir in set(5,6,7): # move left
+                    cursor[1] -= 1
+                
+                tile = board[IX(cursor[0], cursor[1])]
+                if tile == EMPTY:
+                    break
+                if not tile == player:
+                    if tile == WHITE:
+                        board[IX(cursor[0], cursor[1])] = BLACK
+                    if tile == BLACK:
+                        board[IX(cursor[0], cursor[1])] = WHITE
+                else:
+                    break
+        
+               
+
+                
+                
+
+            
+        
+        
     def result(self, move):
         # non destructive board + move result
         board = self.board.copy()
@@ -69,7 +111,8 @@ class Othello():
     
     def change_board(self, move):
 
-        self.board[IX(move[0], move[1])] = self.player()
+        self.board[IX(move[0], move[1])] = self.player(self.board)
+        self.cascade(self.board, move)
 
     
     #def make_move(self):
