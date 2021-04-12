@@ -55,8 +55,8 @@ class Othello():
     
     def cascade(self, board, move):
 
-        if board[IX(move[0], move[1])]:
-            raise NameError("cascading in occupied location")
+        if not board[IX(move[0], move[1])] == EMPTY:
+            raise NameError("cascading in occupied location", move, board[IX(move[0], move[1])])
         
         player = self.player(board)
         
@@ -65,13 +65,13 @@ class Othello():
             tile = board[IX(cursor[0], cursor[1])]  # initialize
             while True:
                 # move the cursor
-                if dir in set(0,1,7): # move up
+                if dir in (0,1,7): # move up
                     cursor[0] -= 1
-                if dir in set(3,4,5): # move down
+                if dir in {3,4,5}: # move down
                     cursor[0] += 1
-                if dir in set(1,2,3): # move right
+                if dir in {1,2,3}: # move right
                     cursor[1] += 1
-                if dir in set(5,6,7): # move left
+                if dir in {5,6,7}: # move left
                     cursor[1] -= 1
                 
                 tile = board[IX(cursor[0], cursor[1])]
@@ -84,13 +84,6 @@ class Othello():
                         board[IX(cursor[0], cursor[1])] = WHITE
                 else:
                     break
-        
-               
-
-                
-                
-
-            
         
         
     def result(self, move):
