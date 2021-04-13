@@ -19,12 +19,22 @@ def initial_state():
 
     return b
 
+def other(player):
+        if player == WHITE:
+            return BLACK
+        elif player == BLACK:
+            return WHITE
+        else:
+            return None
+
 class Othello():
     
     # controls all aspects of game session, including adversarial AI (not intellegent just random)
 
     def __init__(self):
         self.board = initial_state()
+        self.c_player = WHITE
+        self.theoretical_moves = set()
     
     def terminal(self):
         # test if the current board is a terminal state
@@ -33,64 +43,85 @@ class Othello():
                 return False
         return True
     
-    def player(self, board):
+    def player(self, board): #TODO: remove artifact
         # return current player to make move (assuming white goes first)
-        whiteCount = 0
-        blackCount = 0
-        for tile in board:
-            if tile == BLACK:
-                blackCount += 1
-            if tile == WHITE:
-                whiteCount += 1
+        return self.c_player
+    
+    def switch_player(self):
+        if self.c_player == WHITE:
+            self.c_player = BLACK
+        elif self.c_player == BLACK:
+            self.c_player = WHITE
 
-        if whiteCount == blackCount:
-            return WHITE
-        else:
-            return BLACK
+    def get_surrounding_cells(self, cell):
+        cells = set()
+        for i in range(cell[0] - 1, cell[0] + 2):
+            for j in range(cell[1] - 1, cell[1] + 2):
 
+                # Ignore the cell itself
+                if (i, j) == cell:
+                    continue
+
+                # Update count if cell in bounds and is mine
+                if 0 <= i < 8 and 0 <= j < 8:
+                    cells.add((i, j))
+                        
+        return cells
+
+    def update_moves(self, move):
+        
+        raise NotImplementedError
 
     def winner(self):  
         # return a string if you would be so nice (white or black)
         raise NotImplementedError
     
-    def cascade(self, board, move):
-
-        if not board[IX(move[0], move[1])] == EMPTY:
-            raise NameError("cascading in occupied location", move, board[IX(move[0], move[1])])
+    def cascade(self, board, move, player):
         
-        player = self.player(board)
-        
+        board = board.copy()
+        marked = set()
         for dir in range(8):
             cursor = move
             tile = board[IX(cursor[0], cursor[1])]  # initialize
+            possible = set()
+
             while True:
+                
                 # move the cursor
                 if dir in (0,1,7): # move up
-                    cursor[0] -= 1
+                    cursor = (cursor[0] - 1, cursor[1])
                 if dir in {3,4,5}: # move down
-                    cursor[0] += 1
+                    cursor = (cursor[0] + 1, cursor[1])
                 if dir in {1,2,3}: # move right
-                    cursor[1] += 1
+                    cursor = (cursor[0], cursor[1] + 1)
                 if dir in {5,6,7}: # move left
-                    cursor[1] -= 1
-                
+                    cursor = (cursor[0], cursor[1] - 1)
+
                 tile = board[IX(cursor[0], cursor[1])]
-                if tile == EMPTY:
+                if tile == EMPTY: # if raycast finds empty square
                     break
                 if not tile == player:
-                    if tile == WHITE:
-                        board[IX(cursor[0], cursor[1])] = BLACK
-                    if tile == BLACK:
-                        board[IX(cursor[0], cursor[1])] = WHITE
+                    possible.add(cursor)
                 else:
+                    if len(possible) > 0:
+                        marked = marked.union(possible)
                     break
-        
+        print(marked)
+        for cursor in marked:
+            tile = board[IX(cursor[0], cursor[1])]
+            if tile == WHITE:
+                board[IX(cursor[0], cursor[1])] = BLACK
+            if tile == BLACK:
+                board[IX(cursor[0], cursor[1])] = WHITE
+                
+
+        return board, len(marked)
         
     def result(self, move):
         # non destructive board + move result
-        board = self.board.copy()
-        board[IX(move[0], move[1])] = self.player()
-        return board
+
+        board = self.cascade(self.board, move, self.player())
+        board[IX(move[0], move[1])] = self.player(self.board)
 
         raise NotImplementedError
     
@@ -103,9 +134,11 @@ class Othello():
         raise NotImplementedError
     
     def change_board(self, move):
-
-        self.board[IX(move[0], move[1])] = self.player(self.board)
-        self.cascade(self.board, move)
+        p = self.c_player
+        self.board = self.cascade(self.board, move, p)[0]
+        self.board[IX(move[0], move[1])] = p
+        self.switch_player()
+        
 
     
     #def make_move(self):
