@@ -117,7 +117,7 @@ while True:
                 collision_tiles.append(rect)
 
         game_over = game.terminal()
-        player = game.player(game.board)
+        player = game.player()
 
         if game_over:
             winner = game.winner()

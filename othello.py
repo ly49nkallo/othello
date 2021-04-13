@@ -1,3 +1,4 @@
+import random as rand
 
 EMPTY = None
 BLACK = 1
@@ -34,7 +35,10 @@ class Othello():
     def __init__(self):
         self.board = initial_state()
         self.c_player = WHITE
-        self.theoretical_moves = set()
+        self.moves = set()
+        self.update_moves()
+        rand.seed(a=None, version=2)
+        
     
     def terminal(self):
         # test if the current board is a terminal state
@@ -43,7 +47,7 @@ class Othello():
                 return False
         return True
     
-    def player(self, board): #TODO: remove artifact
+    def player(self): #TODO: remove artifact
         # return current player to make move (assuming white goes first)
         return self.c_player
     
@@ -68,9 +72,16 @@ class Othello():
                         
         return cells
 
-    def update_moves(self, move):
-        
-        raise NotImplementedError
+    def update_moves(self):
+        self.moves = set()
+        for i in range(8):
+            for j in range(8):
+                v = self.board[IX(i,j)]
+                c = set()
+                for cell in self.get_surrounding_cells((i,j)):
+                    c.add(self.board[IX(cell[0], cell[1])])
+                if v == EMPTY and any(c):
+                    self.moves.add((i,j))
 
     def winner(self):  
         # return a string if you would be so nice (white or black)
@@ -96,8 +107,10 @@ class Othello():
                     cursor = (cursor[0], cursor[1] + 1)
                 if dir in {5,6,7}: # move left
                     cursor = (cursor[0], cursor[1] - 1)
-
-                tile = board[IX(cursor[0], cursor[1])]
+                try:
+                    tile = board[IX(cursor[0], cursor[1])]
+                except IndexError:
+                    tile = EMPTY
                 if tile == EMPTY: # if raycast finds empty square
                     break
                 if not tile == player:
@@ -106,7 +119,6 @@ class Othello():
                     if len(possible) > 0:
                         marked = marked.union(possible)
                     break
-        print(marked)
         for cursor in marked:
             tile = board[IX(cursor[0], cursor[1])]
             if tile == WHITE:
@@ -121,23 +133,38 @@ class Othello():
         # non destructive board + move result
 
         board = self.cascade(self.board, move, self.player())
-        board[IX(move[0], move[1])] = self.player(self.board)
+        board[IX(move[0], move[1])] = self.player()
 
         raise NotImplementedError
     
     def make_random_move(self):
-
-        raise NotImplementedError
+        
+        x = list()
+        player = self.player()
+        for move in self.moves:
+            if self.cascade(self.board, move, player)[1]:
+                x.append(move)
+        try:
+            choice = rand.choice(x)
+        except IndexError:
+            raise NameError("no more moves remain")
+        return choice 
     
     def make_greedy_move(self):
 
         raise NotImplementedError
     
     def change_board(self, move):
+        if move not in self.moves:
+            raise NameError("move is not valid 147")
         p = self.c_player
         self.board = self.cascade(self.board, move, p)[0]
-        self.board[IX(move[0], move[1])] = p
-        self.switch_player()
+        if self.cascade(self.board, move, p)[1] == 0: # seems to always hold true :( TODO
+            self.board[IX(move[0], move[1])] = p
+            self.update_moves()
+            self.switch_player()
+        else:
+            raise NameError("move is not valid! 167")
         
 
     
