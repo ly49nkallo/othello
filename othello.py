@@ -158,8 +158,9 @@ class Othello():
         if move not in self.moves:
             raise NameError("move is not valid 147")
         p = self.c_player
-        self.board = self.cascade(self.board, move, p)[0]
-        if self.cascade(self.board, move, p)[1] == 0: # seems to always hold true :( TODO
+        c = self.cascade(self.board, move, p)
+        self.board = c[0]
+        if c[1] > 0: # seems to always hold true :( TODO
             self.board[IX(move[0], move[1])] = p
             self.update_moves()
             self.switch_player()
