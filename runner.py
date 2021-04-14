@@ -15,6 +15,9 @@ pygame.init()
 size = width, height = 800, 600
 screen = pygame.display.set_mode(size)
 
+# Set pygame window name
+pygame.display.set_caption('Play Minesweeper!')
+
 # Fonts
 OPEN_SANS = "./assets/OpenSans-Regular.ttf"
 UNIQUE = "./assets/Unique.ttf"
@@ -32,9 +35,28 @@ board_origin = (BOARD_PADDING, BOARD_PADDING)
 game = o.Othello()
 ai_turn = False
 
+version = "Beta 1.0.0 v1"
+
 user = None
 
 Instructions = False
+
+i = [
+    "Take turns against the AI",
+    "Make a move by clicking on an empty tile",
+    "All pieces between your move and any other friendly piece will convert", 
+    "Your move must convert at least one other tile",
+    "Win by ending the game with the most pieces of your color on the board", 
+    "The game ends when either all tiles are filled or no moves are left",
+    "Black always starts first",
+    "Find more on Othello here: https://en.wikipedia.org/wiki/Reversi",
+    
+
+]
+if len(i) < 9:
+    instructionSpacing = (height - 170)/len(i) - 10
+else:
+    instructionSpacing = (height - 170)/len(i) - 5
 
 while True:
     for event in pygame.event.get():
@@ -44,13 +66,46 @@ while True:
     screen.fill(black)
 
     if Instructions:
-        continue
+        # https://www.geeksforgeeks.org/python-display-text-to-pygame-window/
+        title = largeFont.render("How to play", True, white)
+        titleRect = title.get_rect()
+        titleRect.center = ((width / 2), 50)
+        screen.blit(title, titleRect)
+
+        # Show instructions
+        
+        lineC = 0
+        for line in i:
+            lineC += 1
+            text = smallFont.render(line, True, white)
+            textRect = text.get_rect()
+            textRect.center = ((width / 2), lineC * instructionSpacing + 100)
+            screen.blit(text, textRect)
+    
+        exitButton = pygame.Rect((width / 2) - (width/12), height - 75, width/6, 40)
+        exit = smallFont.render("Back", True, black)
+        exitRect = exit.get_rect()
+        exitRect.center = exitButton.center
+        pygame.draw.rect(screen, white, exitButton)
+        screen.blit(exit, exitRect)
+        # Check if button is clicked
+        click, _, _ = pygame.mouse.get_pressed()
+        if click == 1:
+            mouse = pygame.mouse.get_pos()
+            if exitButton.collidepoint(mouse):
+                time.sleep(0.2)
+                Instructions = False
 
     elif user is None:
         title = largeFont.render("Play Othello", True, white)
         titleRect = title.get_rect()
         titleRect.center = ((width / 2), 50)
         screen.blit(title, titleRect)
+
+        ver = smallFont.render(version, True, white)
+        verRect = ver.get_rect()
+        verRect.center = ((width / 2), height - 25)
+        screen.blit(ver, verRect)
 
         # Draw buttons
         playXButton = pygame.Rect((width / 16), (height / 2), width / 4, 50)
@@ -86,7 +141,7 @@ while True:
                 user = o.BLACK
             elif instructionsButton.collidepoint(mouse):
                 time.sleep(0.2)
-                instructions = True
+                Instructions = True
 
     else:
         tile_size = 50
@@ -141,8 +196,10 @@ while True:
             if ai_turn:
                 time.sleep(0.5)
                 move = game.make_random_move()
-                game.change_board(move)
-                ai_turn = False
+                if game.change_board(move):
+                    ai_turn = False
+                else:
+                    raise NameError("Somehow AI made invalid move!")
             else:
                 ai_turn = True
         
@@ -152,7 +209,8 @@ while True:
             for i in range(8):
                 for j in range (8):
                     if game.board[o.IX(i, j)] == o.EMPTY and collision_tiles[o.IX(i, j)].collidepoint(mouse):
-                        game.change_board((i, j))
+                        if not game.change_board((i, j)):
+                            print("The move you made is not valid! Try again.")
+                            time.sleep(0.1)
         
-
     pygame.display.flip()

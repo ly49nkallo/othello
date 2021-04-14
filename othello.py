@@ -15,10 +15,10 @@ def initial_state():
     # the starting posistion of every new othello game
 
     b = [EMPTY] * (8 * 8)  # we use a one dimentional array because it is theoretically faster (and I feel like it)
-    b[IX(3,3)] = BLACK
-    b[IX(4,4)] = BLACK
-    b[IX(3,4)] = WHITE
-    b[IX(4,3)] = WHITE
+    b[IX(3,3)] = WHITE
+    b[IX(4,4)] = WHITE
+    b[IX(3,4)] = BLACK
+    b[IX(4,3)] = BLACK
 
     return b
 
@@ -36,7 +36,7 @@ class Othello():
 
     def __init__(self):
         self.board = initial_state()
-        self.c_player = WHITE
+        self.c_player = BLACK
         self.moves = set()
         self.terminal = False
         self.update_moves()
@@ -50,13 +50,10 @@ class Othello():
             return True
         player = self.player()
         player_moves = set()
-        print(self.moves)
-        print(self.board)
         for move in self.moves:
-            print("cascade", self.cascade(self.board, move, player)[1], move, player)
             if self.cascade(self.board, move, player)[1] > 0:
+                
                 player_moves.add(move)
-        print(len(player_moves))
         return not len(player_moves)
     
     def player(self):
@@ -182,21 +179,21 @@ class Othello():
     def make_greedy_move(self):
 
         raise NotImplementedError
-    
+
     def change_board(self, move):
         if move not in self.moves:
             raise NameError("move is not valid 147")
         p = self.c_player
         c = self.cascade(self.board, move, p)
-        self.board = c[0]
         if c[1] > 0: 
+            self.board = c[0]
             self.board[IX(move[0], move[1])] = p
             self.update_moves()
-            print("moves", self.moves)
             self.switch_player()
         else:
-            raise NameError("move is not valid! 167")
+            return False
         self.terminal = self.isTerminal()
+        return True
         
 
     
