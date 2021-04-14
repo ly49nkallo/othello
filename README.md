@@ -24,4 +24,4 @@ Please report any bugs you find through github issues or through my email addres
 
 Have fun!
 
-Current build: Beta 1.0.0 v1
+Current build: Beta 1.0.0 v2
