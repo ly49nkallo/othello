@@ -35,7 +35,7 @@ board_origin = (BOARD_PADDING, BOARD_PADDING)
 game = o.Othello()
 ai_turn = False
 
-version = "Beta 1.0.0 v1"
+version = "Beta 1.0.0 v2"
 
 user = None
 
@@ -49,6 +49,7 @@ i = [
     "Win by ending the game with the most pieces of your color on the board", 
     "The game ends when either all tiles are filled or no moves are left",
     "Black always starts first",
+    "Find the repository for this project here: https://github.com/ly49nkallo/othello",
     "Find more on Othello here: https://en.wikipedia.org/wiki/Reversi",
     
 

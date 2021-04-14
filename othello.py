@@ -107,7 +107,7 @@ class Othello():
         else:
             return "Black"
 
-        raise NotImplementedError
+        raise Exception
     
     def cascade(self, board, move, player):
         
