@@ -116,7 +116,7 @@ while True:
                     pygame.draw.circle(screen, white, center, radius)
                 collision_tiles.append(rect)
 
-        game_over = game.terminal()
+        game_over = game.terminal
         player = game.player()
 
         if game_over:

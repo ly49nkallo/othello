@@ -6,6 +6,8 @@ WHITE = 2
 
 def IX(i, j):
     # Use this to index into game board
+    if i not in range(8) or j not in range(8):
+        print("fish mk.2")
     return (j + (i * 8))
 
 def initial_state():
@@ -36,18 +38,28 @@ class Othello():
         self.board = initial_state()
         self.c_player = WHITE
         self.moves = set()
+        self.terminal = False
         self.update_moves()
         rand.seed(a=None, version=2)
         
     
-    def terminal(self):
+    def isTerminal(self):
         # test if the current board is a terminal state
-        for tile in self.board:
-            if tile == EMPTY:
-                return False
-        return True
+        self.update_moves()
+        if self.moves == set():
+            return True
+        player = self.player()
+        player_moves = set()
+        print(self.moves)
+        print(self.board)
+        for move in self.moves:
+            print("cascade", self.cascade(self.board, move, player)[1], move, player)
+            if self.cascade(self.board, move, player)[1] > 0:
+                player_moves.add(move)
+        print(len(player_moves))
+        return not len(player_moves)
     
-    def player(self): #TODO: remove artifact
+    def player(self):
         # return current player to make move (assuming white goes first)
         return self.c_player
     
@@ -66,7 +78,6 @@ class Othello():
                 if (i, j) == cell:
                     continue
 
-                # Update count if cell in bounds and is mine
                 if 0 <= i < 8 and 0 <= j < 8:
                     cells.add((i, j))
                         
@@ -85,6 +96,20 @@ class Othello():
 
     def winner(self):  
         # return a string if you would be so nice (white or black)
+        whiteCount = 0
+        blackCount = 0
+        for cell in self.board:
+            if cell == WHITE:
+                whiteCount += 1
+            elif cell == BLACK:
+                blackCount += 1
+        if whiteCount == blackCount:
+            return None
+        if whiteCount > blackCount:
+            return "White"
+        else:
+            return "Black"
+
         raise NotImplementedError
     
     def cascade(self, board, move, player):
@@ -107,9 +132,13 @@ class Othello():
                     cursor = (cursor[0], cursor[1] + 1)
                 if dir in {5,6,7}: # move left
                     cursor = (cursor[0], cursor[1] - 1)
+                
+                if cursor[0] not in range(8) or cursor[1] not in range(8):
+                    break
                 try:
                     tile = board[IX(cursor[0], cursor[1])]
                 except IndexError:
+                    print("fish")
                     tile = EMPTY
                 if tile == EMPTY: # if raycast finds empty square
                     break
@@ -160,12 +189,14 @@ class Othello():
         p = self.c_player
         c = self.cascade(self.board, move, p)
         self.board = c[0]
-        if c[1] > 0: # seems to always hold true :( TODO
+        if c[1] > 0: 
             self.board[IX(move[0], move[1])] = p
             self.update_moves()
+            print("moves", self.moves)
             self.switch_player()
         else:
             raise NameError("move is not valid! 167")
+        self.terminal = self.isTerminal()
         
 
     
