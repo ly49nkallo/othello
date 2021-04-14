@@ -17,7 +17,8 @@ or install pygame directly by using:
 
 Make sure you execute *runner.py* instead of *othello.py* to run game
 
-Ensure that *runner.py* and *othello.py* are in the same directory and that you are using python 3.0 or later
+Ensure that *runner.py* and *othello.py* are in the same directory and that you are using python 3.0 or later.
+If you have not already, I recommend using a python virtual environment to run this project.
 
 Please report any bugs you find through github issues or through my email address, tyabrennan@gmail.com
 
