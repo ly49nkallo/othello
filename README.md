@@ -1,8 +1,12 @@
 # Othello
 
+#### Video Demo:  <URL HERE>
+#### Description:
+  
 This is my cs50 2020 final project.
-This is based on the game "Othello", a special form of Reversi, read about Othello here: https://en.wikipedia.org/wiki/Reversi
-
+This is based on the game "Othello", a special form of Reversi, read about Othello here: https://en.wikipedia.org/wiki/Reversi.
+Please visit the "instructions" in-game if you are still confused.
+ 
 ---
 
 Code used in this project is heavily inspired or ported from code written for cs50ai 2020
@@ -22,6 +26,7 @@ If you have not already, I recommend using a python virtual environment to run t
 
 Please report any bugs you find through github issues or through my email address, tyabrennan@gmail.com
 
+Thank you to cs50x!
 Have fun!
 
-Current build: Beta 1.0.0 v1
+Current build: Beta 1.0.0 v2
