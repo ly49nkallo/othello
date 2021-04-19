@@ -5,12 +5,17 @@
   
 This is my cs50 2020 final project.
 This is based on the game "Othello", a special form of Reversi, read about Othello here: https://en.wikipedia.org/wiki/Reversi.
+Othello is a board game that takes place on an 8x8 grid. Two players take turns placing pieces on the board until there are either no moves or tiles left.
+Placing a piece will automatically convert any opponent pieces between your move and any of your pieces to your color. A valid move must convert at least one
+other opponent piece.
 Please visit the "instructions" in-game if you are still confused.
 
 Link to github repo: https://github.com/ly49nkallo/othello
 
----
-Files:
+ ---
+
+### Files:
+
 There are two main files, runner.py and othello.py. 
 Runner.py is in charge of handling the GUI related components through the module pygame (see requirements.txt).
 Othello.py is in charge of handling the game mechanics and data. There are also two python virtual environments,
