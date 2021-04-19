@@ -1,0 +1,14 @@
+MANIFEST.in
+README.md
+setup.cfg
+setup.py
+submit50/__init__.py
+submit50/__main__.py
+submit50.egg-info/PKG-INFO
+submit50.egg-info/SOURCES.txt
+submit50.egg-info/dependency_links.txt
+submit50.egg-info/entry_points.txt
+submit50.egg-info/requires.txt
+submit50.egg-info/top_level.txt
+submit50/locale/es/LC_MESSAGES/submit50.mo
+submit50/locale/es/LC_MESSAGES/submit50.po

@@ -1,0 +1,3 @@
+lib50<3,>=2
+requests>=2.19
+termcolor>=1.1
