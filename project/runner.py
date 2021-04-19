@@ -19,8 +19,8 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption('Play Minesweeper!')
 
 # Fonts
-OPEN_SANS = "../assets/OpenSans-Regular.ttf"
-UNIQUE = "../assets/Unique.ttf"
+OPEN_SANS = "./assets/OpenSans-Regular.ttf"
+UNIQUE = "./assets/Unique.ttf"
 smallFont = pygame.font.Font(OPEN_SANS, 20)
 mediumFont = pygame.font.Font(UNIQUE, 28)
 largeFont = pygame.font.Font(UNIQUE, 40)
