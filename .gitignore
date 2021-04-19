@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 othello-venv/**
+linux-venv/**
 
 env/lib64
 .gitignore
