@@ -1,6 +1,6 @@
 # Othello
 
-#### Video Demo:  <URL HERE>
+#### Video Demo:  https://youtu.be/97_3Qfey1Hc
 #### Description:
   
 This is my cs50 2020 final project.
