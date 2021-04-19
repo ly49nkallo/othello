@@ -16,7 +16,7 @@ size = width, height = 800, 600
 screen = pygame.display.set_mode(size)
 
 # Set pygame window name
-pygame.display.set_caption('Play Minesweeper!')
+pygame.display.set_caption('Play Othello!')
 
 # Fonts
 OPEN_SANS = "./assets/OpenSans-Regular.ttf"
