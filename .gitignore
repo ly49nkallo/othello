@@ -5,3 +5,6 @@ __pycache__/
 
 othello-venv/**
 
+env/lib64
+.gitignore
+othello-linux/lib64
